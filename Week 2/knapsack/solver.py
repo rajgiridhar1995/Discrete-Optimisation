@@ -17,8 +17,13 @@ def solve_it(input_data):
     # print stdout
     # removes the temporay file
     os.remove(tmp_file_name)
-    print(str(stdout))
-    return stdout.strip()
+    with open('filename', 'r') as input_data_file:
+        input_data = input_data_file.read()
+    lines=input_data.split('\n')
+    firstLine=lines[0].split()
+    print("%d 0" % (int(firstLine[0]),))
+    print(lines[1])
+    return None
 
 
 import sys
@@ -29,6 +34,6 @@ if __name__ == '__main__':
         input_data_file = open(file_location, 'r')
         input_data = ''.join(input_data_file.readlines())
         input_data_file.close()
-        print(solve_it(input_data))
+        solve_it(input_data)
     else:
         print('This test requires an input file.  Please select one from the data directory. (i.e. python solver.py ./data/ks_4_0)')

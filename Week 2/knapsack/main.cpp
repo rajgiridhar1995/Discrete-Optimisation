@@ -1,4 +1,5 @@
 #include <vector>
+#include <fstream>
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -89,7 +90,7 @@ int BnB(node* &n1){
 }
 
 int main(){
-  
+
   // Taking input
   cin>>n>>K;
   for(i=0;i<n;i++){
@@ -125,14 +126,22 @@ int main(){
   for(node *temp=best; temp->parent!=NULL; temp=temp->parent){
     // cout<<"depth: "<<temp->depth<<" :: "<<temp->selected<<endl;
     X[Item[temp->depth-1].second] = temp->selected;
-  }	
+  }
 
   // cout<<"Done"<<endl;
-  cout<<bestSolution<<" "<<1<<endl;
-  for(int m=0;m<n;m++){
-  	cout<<X[m]<<" ";
-  }
+  cout<<bestSolution<<" "<<0<<endl;
+
   cout<<endl;
+    ofstream outfile;// declaration of file pointer named outfile
+    outfile.open("filename", ios::out); // opens file named "filename" for output
+    outfile << bestSolution << " ";
+    outfile << 0 << "\n";//saves "Hello" to the outfile with the insertion operator
+
+    for(int m=0;m<n;m++){
+    	cout<<X[m]<<" ";
+      outfile << X[m] << " ";
+    }
   // delete[] X;
-  return 1;
+  outfile.close();
+  return 0;
 }
