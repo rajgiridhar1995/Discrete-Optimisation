@@ -6,6 +6,7 @@
 #include <new>
 using namespace std;
 
+// global variables
 unsigned int i, j, n, K, temp_v, temp_w;	// Number of items and Capacity are Non-negative
 vector<pair<pair<int,int>,int> > Item;
 // No. of decision variables is n
@@ -19,7 +20,9 @@ typedef struct Node {
   struct Node* parent;
 } node;
 
-bool pairCompareRatio(pair<pair<int,int>,int> i, pair<pair<int,int>,int> j) { return (float(i.first.first)/i.first.second)>(float(j.first.first)/j.first.second);}
+bool pairCompareRatio(pair<pair<int,int>,int> i, pair<pair<int,int>,int> j) {
+ return (float(i.first.first)/i.first.second)>(float(j.first.first)/j.first.second);
+}
 
 int estimate(int start, int room){
   // cout<<"Sorted order"<<endl;
@@ -119,10 +122,6 @@ int main(){
   BnB(root);
   // cout<<"Done"<<Item.size()<<endl;
   int * X = new (nothrow) int[Item.size()];
-  // if(X==nullptr){
-  //   cout<<"Error allocating memory!";
-  //   return 0;
-  // }
   for(node *temp=best; temp->parent!=NULL; temp=temp->parent){
     // cout<<"depth: "<<temp->depth<<" :: "<<temp->selected<<endl;
     X[Item[temp->depth-1].second] = temp->selected;
