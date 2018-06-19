@@ -3,14 +3,11 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
-#include <new>
 using namespace std;
 
 // global variables
 unsigned int i, j, n, K, temp_v, temp_w;	// Number of items and Capacity are Non-negative
 vector<pair<pair<int,int>,int> > Item;
-// No. of decision variables is n
-// Capacity of Knapsack is K
 
 typedef struct Node {
   int value, room, depth,estimate;
@@ -25,10 +22,6 @@ bool pairCompareRatio(pair<pair<int,int>,int> i, pair<pair<int,int>,int> j) {
 }
 
 int estimate(int start, int room){
-  // cout<<"Sorted order"<<endl;
-  // for(i=0;i<n;i++){
-  // 	cout<<Items[i].first<<" "<<Items[i].second<<endl;
-  // }
 
   int value=0,i=start;
   while(room>0&&i<n){
@@ -46,16 +39,15 @@ int estimate(int start, int room){
 
 int bestSolution = 0;
 node *best = NULL;
+
+
 int BnB(node* &n1){
   if(n1->estimate < bestSolution){
-    // Bounding. Pruning.
     return n1->estimate;
   }
   if(n1->room <= 0){
-    // Reached infeasibility
     return n1->value;
   }else if( n1->depth >= n){
-    // Feasible solution. Checking for optimality.
     if(bestSolution<n1->value){
       bestSolution = n1->value;
       best = n1;
@@ -93,8 +85,6 @@ int BnB(node* &n1){
 }
 
 int main(){
-
-  // Taking input
   cin>>n>>K;
   for(i=0;i<n;i++){
     cin>>temp_v>>temp_w;
@@ -102,15 +92,6 @@ int main(){
   }
 
   sort(Item.begin(), Item.end(), pairCompareRatio);
-
-  // cout<<"Sorted order"<<endl;
-  // for(i=0;i<n;i++){
-  //  cout<<Item[i].first.first<<" "<<Item[i].first.second<<" "<<Item[i].second<<endl;
-  // }
-
-  // cout<<estimate(0,K)<<" "<<estimate(1,K)<<" "<<estimate(2,K)<<endl;
-
-  // Branch & Bound approach
   node *root = (node*)malloc(sizeof(node));
   root->value = 0;
   root->room = K;
@@ -118,29 +99,23 @@ int main(){
   root->estimate = estimate(0,root->room);
   root->selected = true;
   root->parent = NULL;
-  // cout<<"Begin"<<endl;
   BnB(root);
-  // cout<<"Done"<<Item.size()<<endl;
   int * X = new (nothrow) int[Item.size()];
   for(node *temp=best; temp->parent!=NULL; temp=temp->parent){
-    // cout<<"depth: "<<temp->depth<<" :: "<<temp->selected<<endl;
     X[Item[temp->depth-1].second] = temp->selected;
   }
 
-  // cout<<"Done"<<endl;
   cout<<bestSolution<<" "<<0<<endl;
 
   cout<<endl;
-    ofstream outfile;// declaration of file pointer named outfile
-    outfile.open("filename", ios::out); // opens file named "filename" for output
+    ofstream outfile;
+    outfile.open("filename", ios::out);
     outfile << bestSolution << " ";
-    outfile << 0 << "\n";//saves "Hello" to the outfile with the insertion operator
-
+    outfile << 0 << "\n";
     for(int m=0;m<n;m++){
     	cout<<X[m]<<" ";
       outfile << X[m] << " ";
     }
-  // delete[] X;
   outfile.close();
   return 0;
 }
